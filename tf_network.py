@@ -45,11 +45,28 @@ class LeNet:
         # layer 2
         # TODO: construct the fc2
 
-        conv1_W = self.init_weight(())
-        conv1_b = None
-
-        pass
-        
+        # input = tf.Variable(tf.constant(1.0, shape=[1, 32, 32, 1]))
+        conv1_w = self.init_weight([5, 5, 1, 6])
+        conv1_b = self.init_bias(6)
+        conv1 = tf.nn.conv2d(feats, conv1_w, strides=[1, 1, 1, 1], padding='VALID') + conv1_b
+        pool1 = tf.nn.avg_pool2d(conv1, [1, 2, 2, 1], strides=[1, 2, 2, 1], padding='VALID')
+        pool1 = tf.nn.relu(pool1)
+        conv2_w = self.init_weight([5, 5, 6, 16])
+        conv2_b = self.init_bias(16)
+        conv2 = tf.nn.conv2d(pool1, conv2_w, strides=[1, 1, 1, 1], padding='VALID') + conv2_b
+        pool2 = tf.nn.avg_pool2d(conv2, [1, 2, 2, 1], strides=[1, 2, 2, 1], padding='VALID')
+        pool2 = tf.nn.relu(pool2)
+        fc1_w = self.init_weight([5 * 5 * 16, 120])
+        fc1_b = self.init_bias(120)
+        fc1 = tf.add(tf.matmul(tf.reshape(pool2, [-1, 5 * 5 * 16]), fc1_w), fc1_b)
+        fc2_w = self.init_weight([120, 84])
+        fc2_b = self.init_bias(84)
+        fc2 = tf.add(tf.matmul(fc1, fc2_w), fc2_b)
+        fc2 = tf.nn.relu(fc2)
+        fc2 = tf.tile(fc2, [10, 1])
+        out_w = self.init_weight([10, 84])
+        logits = tf.reduce_sum(tf.square(tf.subtract(fc2, out_w)), 1)
+        return logits
 
     def forward(self, feats):
         """

@@ -36,8 +36,9 @@ if __name__ == "__main__":
     fc2_b = init_bias(84)
     fc2 = tf.add(tf.matmul(fc1, fc2_w), fc2_b)
     fc2 = tf.nn.relu(fc2)
-    out_w = init_weight([1, 84])
-    out = tf.square(tf.subtract(fc2, out_w))
+    fc2 = tf.tile(fc2, [10, 1])
+    out_w = init_weight([10, 84])
+    out = tf.reduce_sum(tf.square(tf.subtract(fc2, out_w)), 1)
 
     init = tf.compat.v1.global_variables_initializer()
     with tf.compat.v1.Session() as sess:
