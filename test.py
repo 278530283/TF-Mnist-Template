@@ -29,9 +29,9 @@ if __name__ == "__main__":
     conv2 = tf.nn.conv2d(pool1, conv2_w, strides=[1, 1, 1, 1], padding='VALID') + conv2_b
     pool2 = tf.nn.avg_pool2d(conv2, [1, 2, 2, 1], strides=[1, 2, 2, 1], padding='VALID')
     pool2 = tf.nn.relu(pool2)
-    fc1_w = init_weight([5*5*16, 120])
+    fc1_w = init_weight([5 * 5 * 16, 120])
     fc1_b = init_bias(120)
-    fc1 = tf.add(tf.matmul(tf.reshape(pool2, [-1, 5*5*16]), fc1_w), fc1_b)
+    fc1 = tf.add(tf.matmul(tf.reshape(pool2, [-1, 5 * 5 * 16]), fc1_w), fc1_b)
     fc2_w = init_weight([120, 84])
     fc2_b = init_bias(84)
     fc2 = tf.add(tf.matmul(fc1, fc2_w), fc2_b)

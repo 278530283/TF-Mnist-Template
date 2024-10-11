@@ -102,7 +102,7 @@ if __name__ == "__main__":
     log_dir = 'logs/' + current_time
 
     # parameter configuration
-    lr = 0.001  # learning rate
+    lr = 0.005  # learning rate
     batch_size = 1000  # batch size
     epochs = 10  # training period
 
